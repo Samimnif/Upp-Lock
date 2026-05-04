@@ -7,3 +7,12 @@
         status = "okay";
     };
 };
+
+# for ss49e this sensor doesnt have the register
+# it's a analog sensor we use ADC to convert the voltage to number
+&adc {
+    label = "ADC_0";
+    status = "okay";
+    #address-cells = <1>;
+    #size-cells = <0>;
+};
