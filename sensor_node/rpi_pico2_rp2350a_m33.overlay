@@ -16,3 +16,8 @@
     #address-cells = <1>;
     #size-cells = <0>;
 };
+
+&uart1 {
+    status = "okay";
+    current-speed = <115200>;
+};
