@@ -1,3 +1,6 @@
+#include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/pinctrl/rpi-pico-rp2350a-pinctrl.h>
+
 &i2c0 {
     status = "okay";
     clock-frequency = <I2C_BITRATE_STANDARD>;
@@ -8,5 +11,52 @@
         status = "okay";
         accel-range = <0>; /* 0=2g, 1=4g, 2=8g, 3=16g */
         gyro-range = <0>;  /* 0=250dps, 1=500dps, 2=1000dps, 3=2000dps */
+    };
+};
+
+&pinctrl {
+    ws2812_pio0_default: ws2812_pio0_default {
+        group1 {
+            pinmux = <PIO0_P28>;
+        };
+    };
+};
+
+&pio0 {
+    status = "okay";
+
+    pio_ws2812: pio-ws2812 {
+        compatible = "worldsemi,ws2812-rpi_pico-pio";
+        status = "okay";
+        pinctrl-0 = <&ws2812_pio0_default>;
+        pinctrl-names = "default";
+        bit-waveform = <3>, <3>, <4>;
+
+        rgb_led: ws2812 {
+            status = "okay";
+            gpios = <&gpio0 28 GPIO_ACTIVE_HIGH>;
+            chain-length = <1>;
+            color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+            frequency = <800000>;
+            reset-delay = <280>;
+        };
+    };
+};
+
+/ {
+    chosen {
+        zephyr,led-strip = &rgb_led;
+    };
+
+    aliases {
+        mpu6050 = &mpu6050;
+        led-strip = &rgb_led;
+        buzzer = &buzzer0;
+    };
+
+    buzzer0: buzzer_0 {
+        compatible = "custom,gpio-buzzer";
+        status = "okay";
+        gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
     };
 };

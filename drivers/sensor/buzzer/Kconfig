@@ -1,0 +1,6 @@
+config GPIO_BUZZER
+    bool "GPIO buzzer driver"
+    default y
+    depends on GPIO
+    help
+      Enable a simple GPIO buzzer driver.

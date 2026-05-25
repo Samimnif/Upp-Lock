@@ -1,0 +1,21 @@
+description: Custom RGB LED driver (three GPIO pins)
+
+compatible: "custom,rgb-led"
+
+include: [base.yaml]
+
+properties:
+  red-gpios:
+    type: phandle-array
+    required: true
+    description: GPIO spec for the Red channel.
+
+  green-gpios:
+    type: phandle-array
+    required: true
+    description: GPIO spec for the Green channel.
+
+  blue-gpios:
+    type: phandle-array
+    required: true
+    description: GPIO spec for the Blue channel (GPIO 28).

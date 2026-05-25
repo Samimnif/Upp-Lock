@@ -1,0 +1,7 @@
+config RGB_LED
+    bool "Custom RGB LED driver"
+    default y
+    depends on GPIO && LED
+    help
+      Enable the custom RGB LED driver.
+      Drives a common-cathode RGB LED connected to three GPIO pins.
