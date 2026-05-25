@@ -1,0 +1,4 @@
+name: ss49e
+build:
+  cmake: .
+  kconfig: Kconfig

@@ -1,0 +1,7 @@
+config SS49E
+    bool "SS49E Hall Effect Sensor Driver"
+    default y
+    depends on ADC
+    depends on SENSOR
+    help
+      Enable driver for SS49E linear Hall effect sensor.

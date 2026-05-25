@@ -43,6 +43,22 @@
     };
 };
 
+&adc {
+    label  = "ADC_0";
+    status = "okay";
+    #address-cells = <1>;
+    #size-cells    = <0>;
+
+    channel@0 {
+        reg             = <0>;
+        zephyr,gain     = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+        zephyr,input-positive = <0>;
+    };
+};
+
 / {
     chosen {
         zephyr,led-strip = &rgb_led;
@@ -58,5 +74,12 @@
         compatible = "custom,gpio-buzzer";
         status = "okay";
         gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
+    };
+
+        my_ss49e: ss49e_sensor {
+        compatible = "zephyr,ss49e-sensor";
+        status = "okay";
+        io-channels = <&adc 0>;
+        label = "SS49E_SENSOR";
     };
 };
