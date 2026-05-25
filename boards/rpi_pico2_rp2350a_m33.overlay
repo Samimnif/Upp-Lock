@@ -1,4 +1,5 @@
 #include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/display/panel.h>
 #include <zephyr/dt-bindings/pinctrl/rpi-pico-rp2350a-pinctrl.h>
 
 &i2c0 {
@@ -52,11 +53,63 @@
         mpu6050 = &mpu6050;
         led-strip = &rgb_led;
         buzzer = &buzzer0;
+        display-bl = &gc9a01_bl;
     };
 
     buzzer0: buzzer_0 {
         compatible = "custom,gpio-buzzer";
         status = "okay";
         gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
+    };
+
+    lcd_backlight {
+        compatible = "gpio-leds";
+        gc9a01_bl: gc9a01_bl {
+            gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
+            label = "GC9A01 Backlight";
+        };
+    };
+};
+
+/* GC9A01 / GC9X01X round TFT on SPI1. Uses GPIOs after GP8.
+ * Wiring used here:
+ * SCL/SCK -> GP10, SDA/MOSI -> GP11, CS -> GP12, DC -> GP13, RST -> GP14, BL -> GP15
+ */
+&pinctrl {
+    spi1_default: spi1_default {
+        group1 {
+            pinmux = <SPI1_SCK_P10>, <SPI1_TX_P11>;
+        };
+    };
+};
+
+&spi1 {
+    status = "okay";
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-names = "default";
+    cs-gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+};
+
+/ {
+    gc9a01_dbi: gc9a01_dbi {
+        compatible = "zephyr,mipi-dbi-spi";
+        status = "okay";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        spi-dev = <&spi1>;
+        dc-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio0 14 GPIO_ACTIVE_LOW>;
+
+        gc9a01: gc9a01@0 {
+            compatible = "galaxycore,gc9x01x";
+            status = "okay";
+            reg = <0>;
+            width = <240>;
+            height = <240>;
+            pixel-format = <PANEL_PIXEL_FORMAT_RGB_565>;
+            mipi-mode = "MIPI_DBI_MODE_SPI_4WIRE";
+            mipi-max-frequency = <24000000>;
+            display-inversion;
+        };
     };
 };
