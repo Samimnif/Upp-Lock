@@ -1,0 +1,1 @@
+target_sources(app PRIVATE mpu6050.c)

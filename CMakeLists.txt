@@ -5,7 +5,7 @@ set(BOARD rpi_pico2/rp2350a/m33)
 
 
 # Find/Select cmake package 'Zephyr' 
-find_package(Zephyr)
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 
 # This is only used by IntelliSense inside VS Code 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -15,13 +15,10 @@ set(OPENOCD "openocd")
 set(OPENOCD_DEFAULT_PATH "/usr/local/share/openocd/scripts")
 
 # Define project name
-project(mpu6050_driver)
-
-# Add include directory 
-target_include_directories(app PRIVATE src/inc)
+project(upp_lock)
 
 # Add source files
 # FILE(GLOB SRC_FILES "src/*.c")
-target_sources(app PRIVATE
-    src/main.c
-)
+target_sources(app PRIVATE src/main.c)
+
+add_subdirectory(drivers/sensor/mpu6050)

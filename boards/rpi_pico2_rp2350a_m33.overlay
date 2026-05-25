@@ -1,0 +1,12 @@
+&i2c0 {
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+
+    mpu6050: mpu6050@68 {
+        compatible = "invensense,mpu6050-custom";
+        reg = <0x68>;
+        status = "okay";
+        accel-range = <0>; /* 0=2g, 1=4g, 2=8g, 3=16g */
+        gyro-range = <0>;  /* 0=250dps, 1=500dps, 2=1000dps, 3=2000dps */
+    };
+};

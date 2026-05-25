@@ -1,0 +1,4 @@
+config MPU6050_CUSTOM
+    bool "MPU6050 custom sensor"
+    default y
+    depends on I2C

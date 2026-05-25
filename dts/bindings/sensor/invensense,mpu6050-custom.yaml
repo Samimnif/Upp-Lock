@@ -1,0 +1,18 @@
+description: Custom MPU6050 6-axis IMU sensor
+
+compatible: "invensense,mpu6050-custom"
+
+include: [sensor-device.yaml, i2c-device.yaml]
+
+properties:
+  accel-range:
+    type: int
+    default: 0
+    description: Accelerometer range setting. 0=2g, 1=4g, 2=8g, 3=16g.
+    enum: [0, 1, 2, 3]
+
+  gyro-range:
+    type: int
+    default: 0
+    description: Gyroscope range setting. 0=250dps, 1=500dps, 2=1000dps, 3=2000dps.
+    enum: [0, 1, 2, 3]
