@@ -1,0 +1,10 @@
+description: SS49E Linear Hall Effect Sensor
+
+compatible: "zephyr,ss49e-sensor"
+
+include: sensor-device.yaml
+
+properties:
+  io-channels:
+    required: true
+    description: ADC channel used for reading the sensor output

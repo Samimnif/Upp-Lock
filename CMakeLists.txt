@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.20.0)
 
 # Select our board 
 set(BOARD rpi_pico2/rp2350a/m33)
-
+list(APPEND ZEPHYR_EXTRA_MODULES
+    ${CMAKE_CURRENT_SOURCE_DIR}/drivers/sensor/ss49e
+)
 
 # Find/Select cmake package 'Zephyr' 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})

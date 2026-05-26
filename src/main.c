@@ -12,6 +12,7 @@
 #define MPU6050_NODE DT_ALIAS(mpu6050)
 #define RGB_LED_NODE DT_ALIAS(led_strip)
 #define BUZZER_NODE DT_ALIAS(buzzer)
+#define SS49E_NODE  DT_NODELABEL(my_ss49e)
 
 #if !DT_NODE_EXISTS(MPU6050_NODE)
 #define MPU6050_NODE DT_NODELABEL(mpu6050)
@@ -38,10 +39,12 @@ int main(void)
     const struct device *imu = DEVICE_DT_GET(MPU6050_NODE);
     const struct device *rgb = DEVICE_DT_GET(RGB_LED_NODE);
     const struct device *buzzer = DEVICE_DT_GET(BUZZER_NODE);
+    const struct device *ss49e   = DEVICE_DT_GET(SS49E_NODE);
 
     struct sensor_value accel[3];
     struct sensor_value gyro[3];
     struct sensor_value temp;
+    struct sensor_value gauss_val;
     int ret;
 
     printk("MPU6050 Zephyr Sensor API demo starting...\n");
@@ -117,6 +120,22 @@ int main(void)
         printk("TEMP [C] ");
         print_sensor_value(&temp);
         printk("\n\n");
+
+
+
+        /* SS49E */
+        ret = sensor_sample_fetch(ss49e);
+        if (ret == 0) {
+            ret = sensor_channel_get(ss49e, SENSOR_CHAN_MAGN_XYZ, &gauss_val);
+            if (ret == 0) {
+                printk("MAGN [Gauss] %d.%06d\n",
+                       gauss_val.val1, abs(gauss_val.val2));
+            }
+        } else {
+            printk("SS49E fetch failed: %d\n", ret);
+        }
+
+        printk("\n");
 
         /* Normal indication: dim blue blink */
         rgb_set(rgb, 0, 0, 40);

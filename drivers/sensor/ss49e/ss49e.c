@@ -2,6 +2,8 @@
 #include <zephyr/drivers/adc.h>
 #include <zephyr/logging/log.h>
 
+#define DT_DRV_COMPAT zephyr_ss49e_sensor
+
 LOG_MODULE_REGISTER(SS49E, LOG_LEVEL_INF);
 
 struct ss49e_data {
@@ -11,16 +13,16 @@ struct ss49e_data {
 static const struct device *adc_dev;
 
 static struct adc_channel_cfg m_example_channel_cfg = {
-    .gain = ADC_GAIN_1,         
-    .reference = ADC_REF_INTERNAL, 
+    .gain             = ADC_GAIN_1,
+    .reference        = ADC_REF_INTERNAL,
     .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-    .channel_id = 0,
+    .channel_id       = 0,
 };
 
-static int ss49e_sample_fetch(const struct device *dev, enum sensor_channel chan) {
+static int ss49e_sample_fetch(const struct device *dev, enum sensor_channel chan)
+{
     struct ss49e_data *data = dev->data;
     uint16_t buf;
-    
     struct adc_sequence sequence = {
         .channels    = BIT(m_example_channel_cfg.channel_id),
         .buffer      = &buf,
@@ -39,11 +41,12 @@ static int ss49e_sample_fetch(const struct device *dev, enum sensor_channel chan
     return err;
 }
 
-static int ss49e_channel_get(const struct device *dev, enum sensor_channel chan, struct sensor_value *val) {
+static int ss49e_channel_get(const struct device *dev, enum sensor_channel chan,
+                              struct sensor_value *val)
+{
     struct ss49e_data *data = dev->data;
-    float v = (data->raw_val / 4095.0f) * 3300.0f;
+    float v     = (data->raw_val / 4095.0f) * 3300.0f;
     float gauss = (v - 1650.0f) / 1.4f;
-
     val->val1 = (int32_t)gauss;
     val->val2 = (int32_t)((gauss - val->val1) * 1000000);
     return 0;
@@ -51,27 +54,24 @@ static int ss49e_channel_get(const struct device *dev, enum sensor_channel chan,
 
 static const struct sensor_driver_api ss49e_api = {
     .sample_fetch = ss49e_sample_fetch,
-    .channel_get = ss49e_channel_get,
+    .channel_get  = ss49e_channel_get,
 };
 
-static int ss49e_init(const struct device *dev) {
+static int ss49e_init(const struct device *dev)
+{
     adc_dev = DEVICE_DT_GET(DT_NODELABEL(adc));
-
-    if (adc_dev == NULL) {
-        adc_dev = device_get_binding("ADC");
-    }
-
     if (!device_is_ready(adc_dev)) {
         LOG_ERR("ADC device not ready");
         return -ENODEV;
     }
-
-    // 配置通道
     return adc_channel_setup(adc_dev, &m_example_channel_cfg);
 }
 
-static struct ss49e_data ss49e_data_0;
+#define SS49E_DEFINE(inst)                          \
+    static struct ss49e_data ss49e_data_##inst;     \
+    DEVICE_DT_INST_DEFINE(inst,                     \
+        ss49e_init, NULL,                           \
+        &ss49e_data_##inst, NULL,                   \
+        POST_KERNEL, 90, &ss49e_api);
 
-DEVICE_DEFINE(ss49e_dev, "SS49E", ss49e_init, NULL, 
-              &ss49e_data_0, NULL, POST_KERNEL, 
-              90, &ss49e_api);
+DT_INST_FOREACH_STATUS_OKAY(SS49E_DEFINE)

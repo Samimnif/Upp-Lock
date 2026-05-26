@@ -2,3 +2,5 @@ name: ss49e
 build:
   cmake: .
   kconfig: Kconfig
+  dts_bindings:
+    - dts/bindings
