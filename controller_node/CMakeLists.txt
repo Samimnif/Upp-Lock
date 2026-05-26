@@ -11,8 +11,8 @@ find_package(Zephyr)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # For using west flash with picoprobe
-set(OPENOCD "openocd")
-set(OPENOCD_DEFAULT_PATH "/usr/local/share/openocd/scripts")
+# set(OPENOCD "openocd")
+# set(OPENOCD_DEFAULT_PATH "/usr/local/share/openocd/scripts")
 
 # Define project name
 project(mpu6050_driver)
