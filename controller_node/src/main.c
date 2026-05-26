@@ -35,6 +35,7 @@ K_THREAD_DEFINE(rx_thread_id,
 
 void main(void)
 {
+    printf("Base Node\n");
     if (controller_uart_init() != 0) {
 
         printf("UART init failed\n");

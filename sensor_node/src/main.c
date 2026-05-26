@@ -13,6 +13,7 @@ void main(void)
     // const struct device *i2c_dev =
     //     DEVICE_DT_GET(DT_NODELABEL(i2c0));
 
+    printf("Sensor Node\n");
     if (uart_comm_init() != 0) {
 
         printf("UART init failed\n");
