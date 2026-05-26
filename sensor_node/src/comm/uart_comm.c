@@ -92,8 +92,8 @@ void uart_comm_send(const char *msg)
 }
 
 int uart_comm_wait_line(char *buffer,
-                        uint32_t max_len,
-                        int32_t timeout_ms)
+                        size_t max_len,
+                        k_timeout_t timeout_ms)
 {
     if (buffer == NULL) {
         return -1;
@@ -103,7 +103,7 @@ int uart_comm_wait_line(char *buffer,
 
     int ret = k_msgq_get(&sensor_uart_msgq,
                          temp,
-                         K_MSEC(timeout_ms));
+                         timeout_ms);
 
     if (ret != 0) {
         return ret;

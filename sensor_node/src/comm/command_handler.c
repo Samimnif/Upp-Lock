@@ -4,29 +4,24 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "drivers/ltr303/ltr303.h"
+// #include "drivers/ltr303/ltr303.h"
 
-extern ltr303_t g_ltr303;
+// extern ltr303_t g_ltr303;
 
 void command_handler_process(void)
 {
     char line[64];
 
-    if (!uart_comm_line_available()) {
-        return;
+    if (uart_comm_wait_line(line, sizeof(line), K_NO_WAIT) == 0) {
+        if (strcmp(line, "PING") == 0) {
+
+            uart_comm_send("PONG\n");
+            return;
+        }
     }
 
-    if (uart_comm_get_line(line,
-                           sizeof(line)) != 0) {
-        return;
-    }
 
-    if (strcmp(line, "PING") == 0) {
-
-        uart_comm_send("PONG\n");
-        return;
-    }
-
+    /*
     if (strcmp(line, "READ_LTR") == 0) {
 
         ltr303_raw_data_t raw;
@@ -51,6 +46,7 @@ void command_handler_process(void)
 
         return;
     }
+    */
 
     /* 
     if (strcmp(line, "READ_ALL") == 0) {

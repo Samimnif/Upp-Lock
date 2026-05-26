@@ -3,10 +3,9 @@
 
 #include <zephyr/kernel.h>
 
-#include "comm/uart_comm.h"
-#include "drivers/ltr303/ltr303.h"
+#include "uart_comm.h"
 
-extern ltr303_t g_ltr303;
+// extern ltr303_t g_ltr303;
 
 #define CMD_THREAD_STACK_SIZE 1024
 #define CMD_THREAD_PRIORITY   5
@@ -29,6 +28,7 @@ static void command_thread(void)
             continue;
         }
 
+        /*         
         if (strcmp(line, "READ_LTR") == 0) {
 
             ltr303_raw_data_t raw;
@@ -53,6 +53,7 @@ static void command_thread(void)
 
             continue;
         }
+        */
 
         uart_comm_send("UNKNOWN\n");
     }

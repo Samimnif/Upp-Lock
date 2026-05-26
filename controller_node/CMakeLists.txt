@@ -27,7 +27,5 @@ target_include_directories(app PRIVATE
 # FILE(GLOB SRC_FILES "src/*.c")
 target_sources(app PRIVATE
     src/main.c
-    src/comm/uart_comm.c
-    src/comm/command_handler.c
-    src/comm/command_thread.c
+    src/controller_uart.c
 )

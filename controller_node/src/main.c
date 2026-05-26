@@ -46,11 +46,11 @@ void main(void)
     while (1) {
 
         controller_uart_send("PING\n");
+        printf("PING SENT!\n");
 
         k_msleep(1000);
 
-        controller_uart_send("READ_LTR\n");
-
-        k_msleep(2000);
+        // controller_uart_send("READ_LTR\n");
+        // k_msleep(2000);
     }
 }
