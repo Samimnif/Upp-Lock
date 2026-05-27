@@ -12,14 +12,15 @@ void command_handler_process(void)
 {
     char line[64];
 
-    if (uart_comm_wait_line(line, sizeof(line), K_NO_WAIT) == 0) {
-        if (strcmp(line, "PING") == 0) {
-
-            uart_comm_send("PONG\n");
-            return;
-        }
+    if (uart_comm_wait_line(line, sizeof(line), K_NO_WAIT) != 0) {
+        /* No message available — nothing to process. */
+        return;
     }
 
+    if (strcmp(line, "PING") == 0) {
+        uart_comm_send("PONG\n");
+        return;
+    }
 
     /*
     if (strcmp(line, "READ_LTR") == 0) {

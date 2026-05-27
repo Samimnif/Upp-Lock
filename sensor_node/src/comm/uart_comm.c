@@ -16,6 +16,9 @@ K_MSGQ_DEFINE(sensor_uart_msgq,
               UART_MSGQ_DEPTH,
               4);
 
+/* Starts at 0 (unavailable); uart_comm_init() posts it once ready. */
+K_SEM_DEFINE(uart_comm_ready, 0, 1);
+
 static const struct device *uart_dev;
 
 static char isr_line_buffer[UART_LINE_MAX_LEN];
@@ -75,6 +78,9 @@ int uart_comm_init(void)
                                     NULL);
 
     uart_irq_rx_enable(uart_dev);
+
+    /* Signal that the driver is ready — unblocks command_thread. */
+    k_sem_give(&uart_comm_ready);
 
     return 0;
 }

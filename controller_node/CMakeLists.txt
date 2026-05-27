@@ -1,30 +1,20 @@
 cmake_minimum_required(VERSION 3.20.0)
 
-# Select our board 
-set(BOARD rpi_pico2/rp2350a/m33)
+# Add USB CDC console only when building the RP2040 Pico controller.
+# Build with: west build -b rpi_pico <path>/controller_node --pristine
+if("${BOARD}" STREQUAL "rpi_pico")
+    set(EXTRA_CONF_FILE "rpi_pico_usb.conf")
+endif()
 
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
+project(upp_lock_controller_uart)
 
-# Find/Select cmake package 'Zephyr' 
-find_package(Zephyr)
-
-# This is only used by IntelliSense inside VS Code 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# For using west flash with picoprobe
-# set(OPENOCD "openocd")
-# set(OPENOCD_DEFAULT_PATH "/usr/local/share/openocd/scripts")
-
-# Define project name
-project(mpu6050_driver)
-
-# Add include directory 
 target_include_directories(app PRIVATE
-    src/inc
-    src/comm
+    src
 )
 
-# Add source files
-# FILE(GLOB SRC_FILES "src/*.c")
 target_sources(app PRIVATE
     src/main.c
     src/controller_uart.c

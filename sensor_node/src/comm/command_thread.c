@@ -5,57 +5,33 @@
 
 #include "uart_comm.h"
 
-// extern ltr303_t g_ltr303;
-
 #define CMD_THREAD_STACK_SIZE 1024
 #define CMD_THREAD_PRIORITY   5
 
 static void command_thread(void)
 {
+    /* Block here until uart_comm_init() has registered the ISR and
+       enabled RX interrupts. Without this, bytes arriving before init
+       are silently dropped and the msgq is never populated. */
+    k_sem_take(&uart_comm_ready, K_FOREVER);
+
     char line[64];
 
     while (1) {
-
-        if (uart_comm_wait_line(line,
-                                sizeof(line),
-                                K_FOREVER) != 0) {
+        if (uart_comm_wait_line(line, sizeof(line), K_FOREVER) != 0) {
             continue;
         }
+
+        printf("Sensor RX <- %s\n", line);
 
         if (strcmp(line, "PING") == 0) {
-
             uart_comm_send("PONG\n");
+            printf("Sensor TX -> PONG\n");
             continue;
         }
-
-        /*         
-        if (strcmp(line, "READ_LTR") == 0) {
-
-            ltr303_raw_data_t raw;
-
-            if (ltr303_read_raw(&g_ltr303,
-                                &raw) == 0) {
-
-                char tx[64];
-
-                snprintf(tx,
-                         sizeof(tx),
-                         "LTR,%u,%u\n",
-                         raw.ch1_ir_raw,
-                         raw.ch0_visible_ir_raw);
-
-                uart_comm_send(tx);
-
-            } else {
-
-                uart_comm_send("ERR\n");
-            }
-
-            continue;
-        }
-        */
 
         uart_comm_send("UNKNOWN\n");
+        printf("Sensor TX -> UNKNOWN\n");
     }
 }
 
