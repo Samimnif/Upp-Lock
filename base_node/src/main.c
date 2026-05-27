@@ -19,7 +19,7 @@
 #include "../../common/protocol.h"
 
 /* ── Config ────────────────────────────────────────────── */
-#define COMMS_UART_NODE   DT_NODELABEL(uart0)
+#define COMMS_UART_NODE   DT_NODELABEL(uart1)
 #define POLL_INTERVAL_MS  2000   /* How often to request all sensor data */
 #define RX_TIMEOUT_MS     500    /* Max wait for a response              */
 

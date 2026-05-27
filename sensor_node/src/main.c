@@ -6,8 +6,8 @@
  * Simulates a temperature/humidity sensor (replace with real driver).
  *
  * Wiring (Base ↔ Sensor):
- *   Sensor GP4  (UART1 TX) → Base GP1  (UART0 RX)
- *   Sensor GP5  (UART1 RX) ← Base GP0  (UART0 TX)
+ *   Sensor GP8  (UART1 TX) → Base GP5  (UART1 RX)
+ *   Sensor GP9  (UART1 RX) ← Base GP4  (UART1 TX)
  *   GND ↔ GND
  */
 
@@ -71,10 +71,19 @@ static uint8_t rx_get_byte(void)
     return c;
 }
 
-/* ── Low-level UART send ───────────────────────────────── */
+/* 
 static void uart_send_bytes(const uint8_t *buf, size_t len)
 {
     uart_fifo_fill(comms_uart, buf, (int)len);
+}
+
+*/
+
+static void uart_send_bytes(const uint8_t *buf, size_t len)
+{
+    for (size_t i = 0; i < len; i++) {
+        uart_poll_out(comms_uart, buf[i]);
+    }
 }
 
 /* ── Sensor read (replace with real driver calls) ──────── */
