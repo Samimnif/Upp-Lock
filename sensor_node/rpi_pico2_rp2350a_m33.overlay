@@ -1,0 +1,80 @@
+#include <zephyr/dt-bindings/pinctrl/rpi-pico-pinctrl-common.h>
+#include <zephyr/dt-bindings/i2c/i2c.h>
+
+&pinctrl {
+    uart1_default: uart1_default {
+        group1 {
+            pinmux = <UART1_TX_P8>;
+        };
+
+        group2 {
+            pinmux = <UART1_RX_P9>;
+            input-enable;
+        };
+    };
+
+    i2c0_default: i2c0_default {
+        group1 {
+            pinmux = <I2C0_SDA_P4>, <I2C0_SCL_P5>;
+            input-enable;
+            input-schmitt-enable;
+        };
+    };
+
+   i2c1_default: i2c1_default {
+        group1 {
+            pinmux = <I2C1_SDA_P2>, <I2C1_SCL_P3>;
+            input-enable;
+            input-schmitt-enable;
+        };
+    };
+
+
+};
+
+&uart1 {
+    status = "okay";
+    current-speed = <115200>;
+    pinctrl-0 = <&uart1_default>;
+    pinctrl-names = "default";
+};
+
+&i2c0 {
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-names = "default";
+
+    mpu6050: mpu6050@68 {
+    compatible = "invensense,mpu6050-custom";
+    reg = <0x68>;
+    status = "okay";
+    accel-range = <0>;
+    gyro-range = <0>;
+};
+};
+
+&i2c1 {
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
+    pinctrl-0 = <&i2c1_default>;
+    pinctrl-names = "default";
+
+    ltr303: ltr303@29 {
+        compatible = "ltr,ltr303";
+        reg = <0x29>;
+        status = "okay";
+    };
+};
+
+&adc {
+    status = "okay";
+};
+
+ / {
+    ss49e: ss49e {
+        compatible = "zephyr,ss49e-sensor";
+        io-channels = <&adc 0>;
+        status = "okay";
+    };
+};

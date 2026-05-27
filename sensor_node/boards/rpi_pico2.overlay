@@ -1,0 +1,30 @@
+/*
+ * sensor_node/boards/rpi_pico2.overlay
+ *
+ * Configures UART1 on RP2350 Pico 2 for communication with the base node.
+ *
+ * Pins:
+ *   GP4 = TX  (connect to Base GP1/UART0-RX)
+ *   GP5 = RX  (connect to Base GP0/UART0-TX)
+ *
+ * Baud rate: 115200
+ */
+
+&uart1 {
+	status = "okay";
+	current-speed = <115200>;
+	pinctrl-0 = <&uart1_default>;
+	pinctrl-names = "default";
+};
+
+&pinctrl {
+	uart1_default: uart1_default {
+		group1 {
+			pinmux = <UART1_TX_P4>;   /* GP4 → TX */
+		};
+		group2 {
+			pinmux = <UART1_RX_P5>;   /* GP5 → RX */
+			input-enable;
+		};
+	};
+};
