@@ -16,8 +16,9 @@
 
 &i2c1 {
     status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>;
 
-    ltr303@29 {
+    ltr303: ltr303@29 {
         compatible = "ltr,ltr303";
         reg = <0x29>;
         status = "okay";
