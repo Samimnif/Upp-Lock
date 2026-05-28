@@ -1,5 +1,6 @@
 source "Kconfig.zephyr"
 
 rsource "drivers/sensor/mpu6050/Kconfig"
+rsource "drivers/sensor/ltr303/Kconfig"
 rsource "drivers/sensor/rgb_led/Kconfig"
 rsource "drivers/sensor/buzzer/Kconfig"

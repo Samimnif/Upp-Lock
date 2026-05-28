@@ -2,4 +2,4 @@ description: LTR303 ambient light sensor
 
 compatible: "ltr,ltr303"
 
-include: i2c-device.yaml
+include: [sensor-device.yaml, i2c-device.yaml]

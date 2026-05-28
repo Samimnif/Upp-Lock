@@ -24,5 +24,6 @@ project(upp_lock)
 target_sources(app PRIVATE src/main.c)
 
 add_subdirectory(drivers/sensor/mpu6050)
+add_subdirectory(drivers/sensor/ltr303)
 #add_subdirectory(drivers/sensor/rgb_led)
 add_subdirectory(drivers/sensor/buzzer)
