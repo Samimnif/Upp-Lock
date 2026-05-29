@@ -1,7 +1,7 @@
 config LTR303
-    bool "LTR303 ambient light sensor"
+    bool "LTR303 ambient light sensor driver"
     default y
     depends on I2C
-    select SENSOR
+    depends on SENSOR
     help
-      Enable driver for the Lite-On LTR303 ambient light sensor.
+      Enable the custom LTR303 ambient light sensor driver.

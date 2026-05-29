@@ -7,10 +7,11 @@ project(sensor_node)
 
 target_sources(app PRIVATE
     src/main.c
-    ../drivers/sensor/ltr303/ltr303.c
     ../drivers/sensor/ss49e/ss49e.c
+    ../drivers/sensor/buzzer/buzzer.c
 )
 
 add_subdirectory(../drivers/sensor/mpu6050 mpu6050_driver)
+add_subdirectory(../drivers/sensor/ltr303 ltr303_driver)
 
 target_include_directories(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../common)

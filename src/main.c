@@ -10,17 +10,12 @@
 #include "../drivers/sensor/buzzer/buzzer.h"
 
 #define MPU6050_NODE DT_ALIAS(mpu6050)
-#define LTR303_NODE DT_ALIAS(ltr303)
 #define RGB_LED_NODE DT_ALIAS(led_strip)
 #define BUZZER_NODE DT_ALIAS(buzzer)
 #define SS49E_NODE  DT_NODELABEL(my_ss49e)
 
 #if !DT_NODE_EXISTS(MPU6050_NODE)
 #define MPU6050_NODE DT_NODELABEL(mpu6050)
-#endif
-
-#if !DT_NODE_EXISTS(LTR303_NODE)
-#define LTR303_NODE DT_NODELABEL(ltr303)
 #endif
 
 static void print_sensor_value(const struct sensor_value *val)
@@ -42,7 +37,6 @@ static int rgb_set(const struct device *rgb, uint8_t r, uint8_t g, uint8_t b)
 int main(void)
 {
     const struct device *imu = DEVICE_DT_GET(MPU6050_NODE);
-    const struct device *ltr = DEVICE_DT_GET_ANY(liteon_ltr303);
     const struct device *rgb = DEVICE_DT_GET(RGB_LED_NODE);
     const struct device *buzzer = DEVICE_DT_GET(BUZZER_NODE);
     const struct device *ss49e   = DEVICE_DT_GET(SS49E_NODE);
@@ -51,7 +45,6 @@ int main(void)
     struct sensor_value gyro[3];
     struct sensor_value temp;
     struct sensor_value gauss_val;
-    struct sensor_value lux;
     int ret;
 
     printk("MPU6050 Zephyr Sensor API demo starting...\n");
@@ -59,10 +52,6 @@ int main(void)
     if (!device_is_ready(imu))
     {
         printk("MPU6050 device is not ready\n");
-        return 0;
-    }
-
-    if (!device_is_ready(ltr)) {
         return 0;
     }
 
@@ -147,11 +136,6 @@ int main(void)
         }
 
         printk("\n");
-
-        /* LTR */
-        sensor_sample_fetch(ltr);
-        sensor_channel_get(ltr, SENSOR_CHAN_LIGHT, &lux);
-        printk("lux: %d\n", lux.val1);
 
         /* Normal indication: dim blue blink */
         rgb_set(rgb, 0, 0, 40);

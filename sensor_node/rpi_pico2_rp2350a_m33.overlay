@@ -1,4 +1,5 @@
-#include <zephyr/dt-bindings/pinctrl/rpi-pico-pinctrl-common.h>
+#include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/pinctrl/rpi-pico-rp2350a-pinctrl.h>
 #include <zephyr/dt-bindings/i2c/i2c.h>
 
 &pinctrl {
@@ -29,7 +30,11 @@
         };
     };
 
-
+    ws2812_pio0_default: ws2812_pio0_default {
+        group1 {
+            pinmux = <PIO0_P28>;
+        };
+    };
 };
 
 &uart1 {
@@ -67,11 +72,47 @@
     };
 };
 
+&pio0 {
+    status = "okay";
+
+    pio_ws2812: pio-ws2812 {
+        compatible = "worldsemi,ws2812-rpi_pico-pio";
+        status = "okay";
+        pinctrl-0 = <&ws2812_pio0_default>;
+        pinctrl-names = "default";
+        bit-waveform = <3>, <3>, <4>;
+
+        rgb_led: ws2812 {
+            status = "okay";
+            gpios = <&gpio0 28 GPIO_ACTIVE_HIGH>;
+            chain-length = <1>;
+            color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+            frequency = <800000>;
+            reset-delay = <280>;
+        };
+    };
+};
+
 &adc {
     status = "okay";
 };
 
- / {
+/ {
+    chosen {
+        zephyr,led-strip = &rgb_led;
+    };
+
+    aliases {
+        led-strip = &rgb_led;
+        buzzer = &buzzer0;
+    };
+
+    buzzer0: buzzer_0 {
+        compatible = "custom,gpio-buzzer";
+        status = "okay";
+        gpios = <&gpio0 18 GPIO_ACTIVE_HIGH>;
+    };
+
     ss49e: ss49e {
         compatible = "zephyr,ss49e-sensor";
         io-channels = <&adc 0>;

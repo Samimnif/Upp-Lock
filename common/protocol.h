@@ -26,6 +26,7 @@ typedef enum {
     CMD_READ_HUMIDITY = 0x03,   /* No payload; sensor returns hum data   */
     CMD_READ_ALL      = 0x04,   /* No payload; sensor returns all data   */
     CMD_SET_INTERVAL  = 0x05,   /* Payload: uint16_t ms between readings */
+    CMD_SOUND_ALARM   = 0x06,   /* Payload: optional uint16_t duration ms   */
     CMD_RESET         = 0xFF,   /* No payload; sensor soft-resets        */
 } proto_cmd_t;
 
@@ -35,7 +36,7 @@ typedef enum {
     RSP_NACK          = 0x81,   /* Command rejected / unknown            */
     RSP_TEMP          = 0x82,   /* Payload: int16_t centidegrees (°C×100)*/
     RSP_HUMIDITY      = 0x83,   /* Payload: uint16_t centi-percent       */
-    RSP_ALL           = 0x84,   /* Payload: temp(int16) + hum(uint16)    */
+    RSP_ALL           = 0x84,   /* Payload: light + accel XYZ + gyro XYZ + hall */
     RSP_ERROR         = 0xFF,   /* Payload: uint8_t error code           */
 } proto_rsp_t;
 
