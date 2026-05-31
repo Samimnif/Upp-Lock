@@ -1,0 +1,30 @@
+/*
+ * base_node/boards/rpi_pico.overlay
+ *
+ * Configures UART0 on RP2040 Pico for communication with the sensor node.
+ *
+ * Pins:
+ *   GP0 = TX  (connect to Sensor GP5/UART1-RX)
+ *   GP1 = RX  (connect to Sensor GP4/UART1-TX)
+ *
+ * Baud rate: 115200
+ */
+
+&uart0 {
+	status = "okay";
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-names = "default";
+};
+
+&pinctrl {
+	uart0_default: uart0_default {
+		group1 {
+			pinmux = <UART0_TX_P0>;   /* GP0 → TX */
+		};
+		group2 {
+			pinmux = <UART0_RX_P1>;   /* GP1 → RX */
+			input-enable;
+		};
+	};
+};
